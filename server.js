@@ -17,6 +17,10 @@ app.get('/js/script.js', function(req, res) {
   res.sendfile(__dirname + '/js/script.js');
 });
 
+app.get('/js/jquery-2.0.0.min.js', function(req, res) {
+  res.sendfile(__dirname + '/js/jquery-2.0.0.min.js');
+});
+
 app.get('/js/webrtc.io.js', function(req, res) {
   res.sendfile(__dirname + '/js/webrtc.io.js');
 });

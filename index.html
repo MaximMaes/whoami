@@ -4,10 +4,15 @@
     <title>Who Am I?</title>
     <link type="text/css" href="css/style.css" rel="stylesheet"></link>
   </head>
-  <body onload="init()">
+  <body>
       <div id="newRoom" class="button">Create A New Room</div>
-      <div id="videos">
+      <div id="video">
         <video id="oponent" autoplay width="400" height="320"></video>
+      </div>
+
+      <div class="buttonBox">
+        <div id="yes" class="button">Yes</div>
+        <div id="no" class="button">No</div>
       </div>
 
       <div id="chatbox">
@@ -16,12 +21,8 @@
         </div>
         <input id="chatinput" type="text" placeholder="Message:"/>
       </div>
-
-      <div class="buttonBox">
-        <div id="yes" class="button">Yes</div>
-        <div id="no" class="button">No</div>
-      </div>
-
+      
+      <script src="js/jquery-2.0.0.min.js"></script>
       <script src="js/webrtc.io.js"></script>
       <script src="js/script.js"></script>
   </body>
