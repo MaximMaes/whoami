@@ -13,7 +13,19 @@ body {
   background-image: url(/images/billie_holiday.png);
 }
 
-#oponent {
+#videos {
+  float: left;
+}
+
+#pickNames {
+  float: right;
+}
+
+#name {
+  z-index: 1;
+}
+
+#opponent {
   position: absolute;
   left: 0px;
   bottom: 0px;

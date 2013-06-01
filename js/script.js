@@ -1,7 +1,9 @@
-$(document).ready(function() {
-	var PeerConnection = window.PeerConnection || window.webkitPeerConnection00 || window.webkitRTCPeerConnection || window.mozRTCPeerConnection || window.RTCPeerConnection;
-	var room = window.location.hash.slice(1);
+var videos = [];
+var PeerConnection = window.PeerConnection || window.webkitPeerConnection00 || window.webkitRTCPeerConnection || window.mozRTCPeerConnection || window.RTCPeerConnection;
+var room = window.location.hash.slice(1);
+var name = "";
 
+$(document).ready(function() {
 	// make sure users are in a room
 	if (room == "") {
 		initNewRoom();
@@ -25,6 +27,11 @@ $(document).ready(function() {
 		initChat();
 	});
 
+	/* game */
+	if (videos.length > 0) {
+		$("#pickNames").show();
+	}
+
 	$("#hideShowMessages").on('click', function(e) {
 		$("#messages").toggle();
 	});
@@ -46,6 +53,14 @@ var initNewRoom = function() {
 }
 
 /* video */
+var cloneVideo = function(domId, socketId) {
+	var video = document.getElementById(domId);
+	var clone = video.cloneNode(false);
+	clone.id = "opponent" + socketId;
+	document.getElementById('videos').appendChild(clone);
+	videos.push(clone);
+	return clone;
+}
 
 function init() {
 	if(PeerConnection) {
@@ -53,8 +68,8 @@ function init() {
 			"video": {"mandatory": {}, "optional": []},
 			"audio": true
 		}, function(stream) {
-				document.getElementById('oponent').src = URL.createObjectURL(stream);
-				document.getElementById('oponent').play();
+				document.getElementById('opponent').src = URL.createObjectURL(stream);
+				document.getElementById('opponent').play();
 			});
 	} else {
 		alert('Your browser is not supported or you have to turn on flags. In chrome you go to chrome://flags and turn on Enable PeerConnection remember to restart chrome');
@@ -66,28 +81,21 @@ function init() {
 
 	rtc.on('add remote stream', function(stream, socketId) {
 		console.log("ADDING REMOTE STREAM...");
-		var clone = cloneVideo('oponent', socketId);
-		document.getElementById(clone.id).setAttribute("class", "");
+		var clone = cloneVideo('opponent', socketId);
+		document.getElementById(clone.id).setAttribute("class", "flip");
 		rtc.attachStream(stream, clone.id);
-		startGame();
+		getNames();
 	});
+
 	rtc.on('disconnect stream', function(data) {
 		console.log('remove ' + data);
-		//removeVideo(data);
+		removeVideo(data);
 	});
+
 	$("#newRoom").on('click', initNewRoom);
 }
 
-function cloneVideo(domId, socketId) {
-	var video = document.getElementById(domId);
-	var clone = video.cloneNode(false);
-	clone.id = "remote" + socketId;
-	document.getElementById('videos').appendChild(clone);
-	videos.push(clone);
-	return clone;
-}
 
-/*
 function removeVideo(socketId) {
 	var video = document.getElementById('remote' + socketId);
 	if(video) {
@@ -95,7 +103,7 @@ function removeVideo(socketId) {
 		video.parentNode.removeChild(video);
 	}
 }
-*/
+
 
 /* chat */
 
@@ -176,16 +184,6 @@ function initChat() {
 	});
 }
 
-function startGame() {
-	getNames();
-}
-
-function getNames() {
-	$("#pickNames").show();
-
-
-}
-
 var websocketNames = {
 	send: function(name) {
 		rtc._socket.send(name);
@@ -195,3 +193,33 @@ var websocketNames = {
 	},
 	event: 'receive_name'
 };
+
+function startGame() {
+	getNames();
+}
+
+var getNames = function() {
+	$("#pickNames").show();
+	var nameSoc = websocketNames;
+
+	$("#btnChar").on('click', function(e) {
+		nameSoc.send(JSON.stringify({
+			"eventName": "set_name",
+			"data": {
+				"name": $("#character").val(),
+				"room": room
+				}
+		}));
+		alert('send');
+	});
+
+	rtc.on(nameSoc.event, function() {
+		alert('recv');
+		var data = nameSoc.recv.apply(this, arguments);
+		console.log(data.name);
+		alert(data.name);
+		$("#name").val(data.name);
+		name = data.name;
+	});
+}
+
