@@ -21,12 +21,30 @@ body {
   float: right;
 }
 
+#answers {
+  float: right;
+}
+
+#answers #no {
+  border: 0.1em red solid;
+  color: red;
+}
+
+#answers #no:hover {
+  background-color: red;
+  color: red;
+}
+
 #name {
-  z-index: 1;
+  z-index: 2;
+  color: red;
+  font-size: 2em;
+  font-weight: bold;
 }
 
 #opponent {
   position: absolute;
+  width: 30%;
   left: 0px;
   bottom: 0px;
 }

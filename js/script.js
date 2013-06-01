@@ -1,4 +1,6 @@
 var videos = [];
+var ID = 0;
+var tries = 15;
 var PeerConnection = window.PeerConnection || window.webkitPeerConnection00 || window.webkitRTCPeerConnection || window.mozRTCPeerConnection || window.RTCPeerConnection;
 var room = window.location.hash.slice(1);
 var name = "";
@@ -9,11 +11,26 @@ $(document).ready(function() {
 		initNewRoom();
 	}
 
-	/* homepage */
-	$("#home").show();
-	$("#game").hide();
+	init();
+
+	// give user ID
+	ID = getID();
+
+	if (ID == 0) {
+		/* game */
+		$("#pickNames").show();
+		$("#home").hide();
+		$("#game").show();
+		$("#messages").hide();
+		$("#answers").hide();
+	} else {
+		/* homepage */
+		$("#home").show();
+		$("#game").hide();
+		$("#pickNames").hide();
+	}
+
 	$("#messages").hide();
-	$("#pickNames").hide();
 	$("#answers").hide();
 
 	$("#singleplayer").on('click', function(e) {
@@ -23,18 +40,21 @@ $(document).ready(function() {
 	$("#multiplayer").on('click', function(e) {
 		$("#home").hide();
 		$("#game").show();
-		init();
 		initChat();
 	});
-
-	/* game */
-	if (videos.length > 0) {
-		$("#pickNames").show();
-	}
 
 	$("#hideShowMessages").on('click', function(e) {
 		$("#messages").toggle();
 	});
+
+	$("#yes").on('click', function(e) {
+		$("#answers").hide();
+	});
+
+	$("#no").on('click', function(e) {
+		$("#answers").hide();
+	});
+
 });
 
 /* room */
@@ -104,7 +124,6 @@ function removeVideo(socketId) {
 	}
 }
 
-
 /* chat */
 
 function addToChat(msg, color) {
@@ -158,7 +177,6 @@ function initChat() {
 	}
 
 	var input = document.getElementById("chatinput");
-	var toggleHideShow = document.getElementById("hideShowMessages");
 	var room = window.location.hash.slice(1);
 	var color = "#" + ((1 << 24) * Math.random() | 0).toString(16);
 
@@ -184,23 +202,42 @@ function initChat() {
 	});
 }
 
-var websocketNames = {
-	send: function(name) {
-		rtc._socket.send(name);
-	},
-	recv: function(name) {
-		return name;
-	},
-	event: 'receive_name'
-};
+var getID = function() {
+	var IDSoc = {
+		send: function(getID) {
+			rtc._socket.send(getID);
+		},
+		recv: function(getID) {
+			return getID;
+		}
+	}
+	$("#multiplayer").on('click', function(e) {
+		IDSoc.send(JSON.stringify({
+			"eventName": "set_ID",
+			"data": {
+				"room": room
+				}
+		}));
+	});
 
-function startGame() {
-	getNames();
+	rtc.on('receive_ID', function() {
+		var data = IDSoc.recv.apply(this, arguments);
+		console.log(data.ID);
+		ID = data.ID
+	});
 }
 
 var getNames = function() {
 	$("#pickNames").show();
-	var nameSoc = websocketNames;
+
+	var nameSoc = {
+		send: function(name) {
+			rtc._socket.send(name);
+		},
+		recv: function(name) {
+			return name;
+		}
+	}
 
 	$("#btnChar").on('click', function(e) {
 		nameSoc.send(JSON.stringify({
@@ -210,16 +247,74 @@ var getNames = function() {
 				"room": room
 				}
 		}));
-		alert('send');
+		$("#name").html($("#character").val());
+		$("#pickNames").hide();
+		if (ID == 1) {
+			$("#answers").show();
+			getAnswers()
+		}
 	});
 
-	rtc.on(nameSoc.event, function() {
-		alert('recv');
+	rtc.on('receive_name', function() {
 		var data = nameSoc.recv.apply(this, arguments);
 		console.log(data.name);
-		alert(data.name);
-		$("#name").val(data.name);
 		name = data.name;
 	});
+}
+
+var getAnswers = function() {
+	var answerSoc = {
+		send: function(answer) {
+			rtc._socket.send(answer);
+		},
+		recv: function(answer) {
+			return answer;
+		}
+	}
+
+	$("#yes").on('click', function(e) {
+		answerSoc.send(JSON.stringify({
+			"eventName": "set_answer",
+			"data": {
+				"answer": '1',
+				"room": room
+				}
+		}));
+	});
+
+	$("#no").on('click', function(e) {
+		answerSoc.send(JSON.stringify({
+			"eventName": "set_answer",
+			"data": {
+				"answer": '0',
+				"room": room
+				}
+		}));
+	});
+
+	rtc.on('receive_answer', function() {
+		alert('rcv');
+		var data = answerSoc.recv.apply(this, arguments);
+		console.log(data.answer);
+		var ans = parseInt(data.answer, 10);
+		if (ans == 0) {
+			if (tries > 1) {
+				tries -= 1;
+				$("#answers").show();
+			} else {
+				youLose();
+			}
+		} else if (ans == 0) {
+			youWin();
+		}
+	});
+}
+
+var youLose = function() {
+	alert('you lose!');
+}
+
+var youWin = function() {
+	alert('you win!');
 }
 
