@@ -21,6 +21,14 @@ app.get('/js/jquery-2.0.0.min.js', function(req, res) {
   res.sendfile(__dirname + '/js/jquery-2.0.0.min.js');
 });
 
+app.get('/images/debut_light.png', function(req, res) {
+  res.sendfile(__dirname + '/images/debut_light.png');
+});
+
+app.get('/images/billie_holiday.png', function(req, res) {
+  res.sendfile(__dirname + '/images/billie_holiday.png');
+});
+
 app.get('/js/webrtc.io.js', function(req, res) {
   res.sendfile(__dirname + '/js/webrtc.io.js');
 });

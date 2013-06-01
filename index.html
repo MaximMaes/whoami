@@ -5,12 +5,25 @@
     <link type="text/css" href="css/style.css" rel="stylesheet"></link>
   </head>
   <body>
+    <div id="home">
+      <div id="gameMode" class="buttonBox">
+        <div id="singleplayer" class="button">Singleplayer</div>
+        <div id="multiplayer" class="button">Multiplayer</div>
+      </div>
+    </div>
+
+    <div id="game">
       <div id="newRoom" class="button">Create A New Room</div>
       <div id="video">
         <video id="oponent" autoplay width="400" height="320"></video>
       </div>
 
-      <div class="buttonBox">
+      <div id="pickNames">
+        <label for="character">Give your opponent character:</label>
+        <input type="text" name="character" id="character">
+      </div>
+
+      <div id="answers" class="buttonBox">
         <div id="yes" class="button">Yes</div>
         <div id="no" class="button">No</div>
       </div>
@@ -21,6 +34,7 @@
         </div>
         <input id="chatinput" type="text" placeholder="Message:"/>
       </div>
+    </div>
       
       <script src="js/jquery-2.0.0.min.js"></script>
       <script src="js/webrtc.io.js"></script>
