@@ -165,6 +165,16 @@ webRTC.rtc.on('set_win', function(data, socket) {
   }
 });
 
+
+var mysql      = require('mysql');
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : 'password',
+  database : 'whoamidb'
+});
+connection.connect();
+
 webRTC.rtc.on('get_chars', function(data, socket) {
   var roomList = webRTC.rtc.rooms[data.room] || [];
 

@@ -11,24 +11,19 @@ $(document).ready(function() {
 		initNewRoom();
 	}
 
-	init();
+	/*
 
-	// give user ID
-	ID = getID();
-
-	if (ID == 0) {
-		/* game */
 		$("#pickNames").show();
 		$("#home").hide();
 		$("#game").show();
 		$("#messages").hide();
 		$("#answerButtons").hide();
-	} else {
+	*/
 		/* homepage */
 		$("#home").show();
 		$("#game").hide();
 		$("#pickNames").hide();
-	}
+	
 
 	$("#messages").hide();
 	$("#answerButtons").hide();
@@ -36,13 +31,20 @@ $(document).ready(function() {
 	$("#guess").hide();
 
 	$("#singleplayer").on('click', function(e) {
-		singleplayer();
+		initSingle();
+		initChat();
+		$("#home").hide();
+		$("#game").show();
 	});
 
 	$("#multiplayer").on('click', function(e) {
 		$("#home").hide();
 		$("#game").show();
 		initChat();
+		initMulti();
+
+		// give user ID
+		ID = getID();
 	});
 
 	$("#hideShowMessages").on('click', function(e) {
@@ -50,6 +52,8 @@ $(document).ready(function() {
 	});
 
 	$("#turns").html(tries);
+
+	$("#newRoom").on('click', initNewRoom);
 });
 
 /* room */
@@ -77,7 +81,7 @@ var cloneVideo = function(domId, socketId) {
 	return clone;
 }
 
-function init() {
+function initMulti() {
 	if(PeerConnection) {
 		rtc.createStream({
 			"video": {"mandatory": {}, "optional": []},
@@ -87,7 +91,7 @@ function init() {
 				document.getElementById('opponent').play();
 			});
 	} else {
-		alert('Your browser is not supported or you have to turn on flags. In chrome you go to chrome://flags and turn on Enable PeerConnection remember to restart chrome');
+		alert('Your browser does not fully support this game, but you can play the singleplayer mode.');
 	}
 
 	room = window.location.hash.slice(1);
@@ -106,10 +110,7 @@ function init() {
 		console.log('remove ' + data);
 		removeVideo(data);
 	});
-
-	$("#newRoom").on('click', initNewRoom);
 }
-
 
 function removeVideo(socketId) {
 	var video = document.getElementById('remote' + socketId);
@@ -369,14 +370,18 @@ var notifyWinner = function() {
 }
 
 
-var singleplayer = function() {
-	var getChars = function() {
+var initSingle = function() {
+	room = window.location.hash.slice(1);
+
+	rtc.connect("ws:" + window.location.href.substring(window.location.protocol.length).split('#')[0], room);
+
+	setTimeout(function() {
 		var charsSoc = {
-			send: function(data) {
-				rtc._socket.send(data);
+			send: function(charInfo) {
+				rtc._socket.send(charInfo);
 			},
-			recv: function(data) {
-				return data;
+			recv: function(charInfo) {
+				return charInfo;
 			}
 		}
 		charsSoc.send(JSON.stringify({
@@ -390,5 +395,5 @@ var singleplayer = function() {
 			var data = charsSoc.recv.apply(this, arguments);
 			alert(data.rows[0].name);
 		});
-	}
+	}, 200);
 }
