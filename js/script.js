@@ -1,6 +1,6 @@
 var videos = [];
 var ID = 0;
-var tries = 15;
+var tries = 2;
 var PeerConnection = window.PeerConnection || window.webkitPeerConnection00 || window.webkitRTCPeerConnection || window.mozRTCPeerConnection || window.RTCPeerConnection;
 var room = window.location.hash.slice(1);
 var name = "";
@@ -46,15 +46,6 @@ $(document).ready(function() {
 	$("#hideShowMessages").on('click', function(e) {
 		$("#messages").toggle();
 	});
-
-	$("#yes").on('click', function(e) {
-		$("#answers").hide();
-	});
-
-	$("#no").on('click', function(e) {
-		$("#answers").hide();
-	});
-
 });
 
 /* room */
@@ -251,8 +242,8 @@ var getNames = function() {
 		$("#pickNames").hide();
 		if (ID == 1) {
 			$("#answers").show();
-			getAnswers()
 		}
+		getAnswers();
 	});
 
 	rtc.on('receive_name', function() {
@@ -276,27 +267,31 @@ var getAnswers = function() {
 		answerSoc.send(JSON.stringify({
 			"eventName": "set_answer",
 			"data": {
-				"answer": '1',
+				"ans": '1',
 				"room": room
 				}
 		}));
+		$("#answers").hide();
 	});
+
 
 	$("#no").on('click', function(e) {
 		answerSoc.send(JSON.stringify({
-			"eventName": "set_answer",
+			"eventName": "set_ans",
 			"data": {
-				"answer": '0',
+				"ans": '0',
 				"room": room
 				}
 		}));
+		$("#answers").hide();
 	});
 
-	rtc.on('receive_answer', function() {
+	rtc.on('receive_ans', function() {
 		alert('rcv');
+		
 		var data = answerSoc.recv.apply(this, arguments);
-		console.log(data.answer);
-		var ans = parseInt(data.answer, 10);
+		console.log(data.ans);
+		var ans = parseInt(data.ans, 10);
 		if (ans == 0) {
 			if (tries > 1) {
 				tries -= 1;
@@ -307,6 +302,7 @@ var getAnswers = function() {
 		} else if (ans == 0) {
 			youWin();
 		}
+		
 	});
 }
 

@@ -15,14 +15,17 @@ body {
 
 #videos {
   float: left;
+  width: 33%;
+  margin-right: 10px;
 }
 
 #pickNames {
-  float: right;
+  float: left;
 }
 
 #answers {
-  float: right;
+  float: left;
+  font-size: 2em;
 }
 
 #answers #no {
@@ -32,21 +35,27 @@ body {
 
 #answers #no:hover {
   background-color: red;
-  color: red;
+  color: #EAE9E9;
 }
 
 #name {
   z-index: 2;
   color: red;
-  font-size: 2em;
+  font-size: 1.5em;
   font-weight: bold;
 }
 
 #opponent {
   position: absolute;
-  width: 30%;
+  width: 20%;
   left: 0px;
   bottom: 0px;
+  margin: 0;
+}
+
+video {
+  float: left;
+  width: 100%;
 }
 
 #chatbox {
