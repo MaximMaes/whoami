@@ -164,3 +164,35 @@ webRTC.rtc.on('set_win', function(data, socket) {
     }
   }
 });
+
+webRTC.rtc.on('get_chars', function(data, socket) {
+  var roomList = webRTC.rtc.rooms[data.room] || [];
+
+  for (var i = 0; i < roomList.length; i++) {
+    var socketId = roomList[i];
+
+    if (socketId == socket.id) {
+      var soc = webRTC.rtc.getSocket(socketId);
+
+      if (soc) {
+        connection.query('SELECT * from characters', function(err, rows, fields) {
+          if (err) throw err;
+
+          soc.send(JSON.stringify({
+            "eventName": "receive_chars",
+            "data": {
+                'rows': rows,
+                'fields': fields
+            }
+          }), function(error) {
+            if (error) {
+              console.log(error);
+            }
+          });
+
+          console.log('First character:', rows[0].name);
+        });
+      }
+    }
+  }
+});

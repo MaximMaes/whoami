@@ -36,7 +36,7 @@ $(document).ready(function() {
 	$("#guess").hide();
 
 	$("#singleplayer").on('click', function(e) {
-		alert("TO DO");
+		singleplayer();
 	});
 
 	$("#multiplayer").on('click', function(e) {
@@ -196,6 +196,8 @@ function initChat() {
 		addToChat(data.messages, data.color.toString(16));
 	});
 }
+
+/* game */
 
 var getID = function() {
 	var IDSoc = {
@@ -366,3 +368,27 @@ var notifyWinner = function() {
 	});
 }
 
+
+var singleplayer = function() {
+	var getChars = function() {
+		var charsSoc = {
+			send: function(data) {
+				rtc._socket.send(data);
+			},
+			recv: function(data) {
+				return data;
+			}
+		}
+		charsSoc.send(JSON.stringify({
+			"eventName": "get_chars",
+			"data": {
+				"room": room
+				}
+		}));
+
+		rtc.on('receive_chars', function() {
+			var data = charsSoc.recv.apply(this, arguments);
+			alert(data.rows[0].name);
+		});
+	}
+}
