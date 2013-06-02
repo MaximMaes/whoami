@@ -1,6 +1,6 @@
 var videos = [];
 var ID = 0;
-var tries = 2;
+var tries = 15;
 var PeerConnection = window.PeerConnection || window.webkitPeerConnection00 || window.webkitRTCPeerConnection || window.mozRTCPeerConnection || window.RTCPeerConnection;
 var room = window.location.hash.slice(1);
 var name = "";
@@ -22,7 +22,7 @@ $(document).ready(function() {
 		$("#home").hide();
 		$("#game").show();
 		$("#messages").hide();
-		$("#answers").hide();
+		$("#answerButtons").hide();
 	} else {
 		/* homepage */
 		$("#home").show();
@@ -31,7 +31,9 @@ $(document).ready(function() {
 	}
 
 	$("#messages").hide();
+	$("#answerButtons").hide();
 	$("#answers").hide();
+	$("#guess").hide();
 
 	$("#singleplayer").on('click', function(e) {
 		alert("TO DO");
@@ -46,6 +48,8 @@ $(document).ready(function() {
 	$("#hideShowMessages").on('click', function(e) {
 		$("#messages").toggle();
 	});
+
+	$("#turns").html(tries);
 });
 
 /* room */
@@ -202,6 +206,7 @@ var getID = function() {
 			return getID;
 		}
 	}
+
 	$("#multiplayer").on('click', function(e) {
 		IDSoc.send(JSON.stringify({
 			"eventName": "set_ID",
@@ -241,9 +246,11 @@ var getNames = function() {
 		$("#name").html($("#character").val());
 		$("#pickNames").hide();
 		if (ID == 1) {
-			$("#answers").show();
+			$("#answerButtons").show();
 		}
 		getAnswers();
+		$("#answers").show();
+		$("#guess").show();
 	});
 
 	rtc.on('receive_name', function() {
@@ -263,54 +270,99 @@ var getAnswers = function() {
 		}
 	}
 
-	$("#yes").on('click', function(e) {
+	var end = false;
+
+	$("#btnYes").on('click', function(e) {
 		answerSoc.send(JSON.stringify({
 			"eventName": "set_answer",
 			"data": {
 				"ans": '1',
+				"end": end,
 				"room": room
 				}
 		}));
-		$("#answers").hide();
+		$("#answerButtons").hide();
 	});
 
-
-	$("#no").on('click', function(e) {
+	$("#btnNo").on('click', function(e) {
 		answerSoc.send(JSON.stringify({
 			"eventName": "set_ans",
 			"data": {
 				"ans": '0',
+				"end": end,
 				"room": room
 				}
 		}));
-		$("#answers").hide();
+		$("#answerButtons").hide();
 	});
 
 	rtc.on('receive_ans', function() {
-		alert('rcv');
-		
 		var data = answerSoc.recv.apply(this, arguments);
 		console.log(data.ans);
 		var ans = parseInt(data.ans, 10);
 		if (ans == 0) {
-			if (tries > 1) {
-				tries -= 1;
-				$("#answers").show();
-			} else {
-				youLose();
-			}
-		} else if (ans == 0) {
-			youWin();
+			$("#results").append("<li class='answNo'>No</li>");
+		} else if (ans == 1) {
+			$("#results").append("<li class='answYes'>Yes</li>");
 		}
-		
+		tries -= 1;
+		$("#turns").html(tries);
+		if (tries == 1) {
+			$("#turns").html('You must guess now!');
+			end = true;
+		}
+		if (!data.end) {
+			$("#answerButtons").show();
+		} 
 	});
 }
 
+$("#btnGuess").on('click', function(e) {
+	takeGuess();
+});
+
+var takeGuess = function() {
+	if (name == $("#guessWho").val()) {
+		youWin();
+	} else {
+		if (tries > 2) {
+			tries -= 2;
+			$("#turns").html(tries);
+		} else if (tries == 2) {
+			tries -= 2;
+			$("#turns").html(tries);
+			youLose();
+		}
+	}
+}
+
 var youLose = function() {
-	alert('you lose!');
+	notifyWinner();
+	alert('you lose! \n You were ' + name);
 }
 
 var youWin = function() {
-	alert('you win!');
+	alert('you win! \n You were ' + name);
+}
+
+var notifyWinner = function() {
+	var winSoc = {
+		send: function(win) {
+			rtc._socket.send(win);
+		},
+		recv: function(win) {
+			return win;
+		}
+	}
+	winSoc.send(JSON.stringify({
+		"eventName": "set_win",
+		"data": {
+			"room": room
+			}
+	}));
+
+	rtc.on('receive_win', function() {
+		alert('you win! \n You were' + name);
+	});
 }
 

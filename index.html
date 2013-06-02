@@ -6,7 +6,7 @@
   </head>
   <body>
     <div id="home">
-      <div id="gameMode" class="buttonBox">
+      <div id="gameMode">
         <div id="singleplayer" class="button">Singleplayer</div>
         <div id="multiplayer" class="button">Multiplayer</div>
       </div>
@@ -25,9 +25,22 @@
         <div id="btnChar" class="button">Send</div>
       </div>
 
-      <div id="answers" class="buttonBox">
-        <div id="yes" class="button">Yes</div>
-        <div id="no" class="button">No</div>
+      <div id="answerButtons">
+        <div id="btnYes" class="button">Yes</div>
+        <div id="btnNo" class="button">No</div>
+      </div>
+
+      <div id="answers">
+        <p>Remaining turns: <span id="turns"></span></p>
+        <p>Results of guesses: </p>
+        <ul id="results">
+        </ul>
+      </div>
+
+      <div id="guess">
+        <label for="character">Guess who you are:</label>
+        <input type="text" name="guessWho" id="guessWho">
+        <div id="btnGuess" class="button">Guess</div>
       </div>
 
       <div id="chatbox">

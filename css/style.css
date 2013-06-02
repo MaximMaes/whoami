@@ -23,17 +23,17 @@ body {
   float: left;
 }
 
-#answers {
+#answerButtons {
   float: left;
   font-size: 2em;
 }
 
-#answers #no {
+#answerButtons #btnNo {
   border: 0.1em red solid;
   color: red;
 }
 
-#answers #no:hover {
+#answerButtons #btnNo:hover {
   background-color: red;
   color: #EAE9E9;
 }
@@ -93,12 +93,6 @@ video {
 -webkit-transform: rotateY(180deg);
 }
 
-.buttonBox {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  z-index: 1;
-}
 .button {
   text-transform: uppercase;
   border: 0.1em #06BD28 solid;

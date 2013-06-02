@@ -78,7 +78,8 @@ webRTC.rtc.on('set_ans', function(data, socket) {
         soc.send(JSON.stringify({
           "eventName": "receive_ans",
           "data": {
-            "ans": data.ans
+            "ans": data.ans,
+            "end": data.end
           }
         }), function(error) {
           if (error) {
@@ -131,6 +132,29 @@ webRTC.rtc.on('set_name', function(data, socket) {
           "data": {
             "name": data.name
           }
+        }), function(error) {
+          if (error) {
+            console.log(error);
+          }
+        });
+      }
+    }
+  }
+});
+
+webRTC.rtc.on('set_win', function(data, socket) {
+  var roomList = webRTC.rtc.rooms[data.room] || [];
+
+  for (var i = 0; i < roomList.length; i++) {
+    var socketId = roomList[i];
+
+    if (socketId !== socket.id) {
+      var soc = webRTC.rtc.getSocket(socketId);
+
+      if (soc) {
+        soc.send(JSON.stringify({
+          "eventName": "receive_win",
+          "data": {}
         }), function(error) {
           if (error) {
             console.log(error);
