@@ -4,6 +4,16 @@ var tries = 15;
 var PeerConnection = window.PeerConnection || window.webkitPeerConnection00 || window.webkitRTCPeerConnection || window.mozRTCPeerConnection || window.RTCPeerConnection;
 var room = window.location.hash.slice(1);
 var name = "";
+var character = {
+	'name': 'def',
+	'gender': 'def',
+	'human': 'def',
+	'haircolor': 'def',
+	'skincolor': 'def',
+	'glasses': 'def',
+	'tv': 'def',
+	'author': 'def'
+};
 
 $(document).ready(function() {
 	// make sure users are in a room
@@ -29,6 +39,7 @@ $(document).ready(function() {
 	$("#answerButtons").hide();
 	$("#answers").hide();
 	$("#guess").hide();
+	$("#selectQuestion").hide();
 
 	$("#singleplayer").on('click', function(e) {
 		initSingle();
@@ -372,28 +383,101 @@ var notifyWinner = function() {
 
 var initSingle = function() {
 	room = window.location.hash.slice(1);
+	$("#answers").show();
+	$("#guess").show();
 
 	rtc.connect("ws:" + window.location.href.substring(window.location.protocol.length).split('#')[0], room);
 
-	setTimeout(function() {
-		var charsSoc = {
-			send: function(charInfo) {
-				rtc._socket.send(charInfo);
-			},
-			recv: function(charInfo) {
-				return charInfo;
-			}
-		}
-		charsSoc.send(JSON.stringify({
-			"eventName": "get_chars",
-			"data": {
-				"room": room
-				}
-		}));
+	// need to use Timeout cause the websocket might not open quick enough
+	setTimeout(getChars, 200);
 
-		rtc.on('receive_chars', function() {
-			var data = charsSoc.recv.apply(this, arguments);
-			alert(data.rows[0].name);
+	var questions = {
+		'Is it a male?': 'male#gender',
+		'Is it a female?': 'female#gender',
+		'Is it human?': '1#human',
+		'Is it not human?': '0#human',
+		'Does it have black hair?': 'black#haircolor',
+		'Does it have blond hair?': 'blond#haircolor',
+		'Does it have brown hair?': 'brown#haircolor',
+		'Does it have red hair?': 'red#haircolor',
+		'Does it have grey hair?': 'grey#haircolor',
+		'Does it have a black skin?': 'black#skincolor',
+		'Does it have a brown skin?': 'brown#skincolor',
+		'Does it have a white skin?': 'white#skincolor',
+		'Does it have a yellow skin?': 'yellow#skincolor',
+		'Does it wear glasses?': '1#glasses',
+		'Is it a TV-star?': '1#tv',
+		'Is it an author?': '1#author'
+	}
+
+	$("#selectQuestion").show();
+
+	$.each(questions, function(key, val) {
+		$("#dropdownQ").append("<option value=" + val + ">" + key + "</option>");
+	});
+
+	$("#btnAsk").on('click', function(e) {
+		var right = true;
+		var Q = $("#dropdownQ option:selected").text();
+		var val = $("#dropdownQ").val();
+		var value = val.split('#')[0];
+		var field = val.split('#')[1];
+		alert(field);
+		alert(character[field]);
+
+		if(character[field] == value) {
+			right = true;
+		} else {
+			right = false;
+		}
+
+		if (!right) {
+			$("#results").append("<li class='answNo'>" + Q + " No</li>");
+		} else if (right) {
+			$("#results").append("<li class='answYes'>" + Q + " Yes</li>");
+		}
+		tries -= 1;
+		$("#turns").html(tries);
+		if (tries == 1) {
+			$("#turns").html('You must guess now!');
+		}
+	});
+}
+
+var getChars = function() {
+	var charsSoc = {
+		send: function(charInfo) {
+			rtc._socket.send(charInfo);
+		},
+		recv: function(charInfo) {
+			return charInfo;
+		}
+	}
+	charsSoc.send(JSON.stringify({
+		"eventName": "get_chars",
+		"data": {
+			"room": room
+			}
+	}));
+
+	rtc.on('receive_chars', function() {
+		var data = charsSoc.recv.apply(this, arguments);
+		// random character for singleplayer
+		var i = Math.floor(Math.random()*data.rows.length);
+		character.name = data.rows[i].name;
+		character.gender = data.rows[i].gender;
+		character.human = data.rows[i].human;
+		character.haircolor = data.rows[i].haircolor;
+		character.skincolor = data.rows[i].skincolor;
+		character.glasses = data.rows[i].glasses;
+		character.tv = data.rows[i].tv;
+		character.author = data.rows[i].author;
+
+		name = character.name;
+
+		// dropdown for multiplayer
+		$.each(data.rows, function(index, character) {
+			$("#dropdownName").append("<option value=" + character.idcharacter + ">" + character.name + "</option>");
 		});
-	}, 200);
+	});
 }
