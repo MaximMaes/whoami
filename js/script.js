@@ -22,26 +22,25 @@ $(document).ready(function() {
 
 	$("#home").show();
 	$("#game").hide();
+	$("#invite").hide();
 	$("#pickNames").hide();
 	$("#messages").hide();
 	$("#answerButtons").hide();
 	$("#answers").hide();
+	$("#chatbox").hide();
 	$("#guess").hide();
 	$("#selectQuestion").hide();
 
 	$("#singleplayer").on('click', function(e) {
-		initSingle();
-		$("#home").hide();
-		$("#game").show();
-		$("#videos").hide();
-		$("#chatbox").hide();
+		startSingle();
 	});
 
-	$("#multiplayer").on('click', function(e) {
-		$("#home").hide();
-		$("#game").show();
-		initChat();
-		initStream();
+	$("#singleImg").on('click', function(e) {
+		startSingle();
+	});
+
+	$("#multiImg").on('click', function(e) {
+		startMulti();
 	});
 
 	$("#hideShowMessages").on('click', function(e) {
@@ -69,6 +68,21 @@ var initNewRoom = function() {
 }
 
 /* general game functions */
+
+var startSingle = function() {
+	initSingle();
+	$("#home").hide();
+	$("#game").show();
+	$("#videos").hide();
+	$("#chatbox").hide();
+}
+
+var startMulti = function() {
+	$("#home").hide();
+	$("#game").show();
+	initChat();
+	initStream();
+}
 
 var getID = function() {
 	var IDSoc = {

@@ -1,3 +1,8 @@
+// using:
+// https://github.com/webRTC/webRTC.io
+// Based on:
+// https://github.com/webRTC/webrtc.io-demo/
+
 var PeerConnection = window.PeerConnection || window.webkitPeerConnection00 || window.webkitRTCPeerConnection || window.mozRTCPeerConnection || window.RTCPeerConnection;
 
 var cloneVideo = function(domId, socketId) {
@@ -10,6 +15,7 @@ var cloneVideo = function(domId, socketId) {
 }
 
 function initStream() {
+	$("#invite").show();
 	if(PeerConnection) {
 		rtc.createStream({
 			"video": {"mandatory": {}, "optional": []},
@@ -39,6 +45,8 @@ function initStream() {
 		rtc.attachStream(stream, clone.id);
 		// game related
 		getNames();
+		$("#invite").hide();
+		$("#chatbox").show();
 	});
 
 	rtc.on('disconnect stream', function(data) {

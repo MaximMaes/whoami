@@ -5,6 +5,48 @@ body {
   background-image: url(/images/binding_light.png);
 }
 
+header {
+  width: 74%;
+  max-width: 75%;
+  margin: 0 auto;
+  background-image: url(/images/debut_light.png);
+  padding: 10px;
+}
+
+h1 {
+    text-transform: uppercase;
+    font-size: 2.357em;
+    color: #06BD28;
+    float: left;
+    width: 40%;
+}
+
+div#newRoom {
+  float: right;
+}
+
+.startOption {
+  float: left;
+  margin-right: 40px;
+}
+
+.startOption img {
+  width: 120px;
+  height: 120px;
+  float: left;
+  cursor: pointer;
+}
+
+.startOption div.button {
+  clear: both;
+}
+
+#wrapper {
+    width: 75%;
+    padding: 5px;
+    margin: 10px auto;
+}
+
 #videos {
   float: left;
   width: 33%;
@@ -15,9 +57,14 @@ body {
   float: left;
 }
 
+#guess {
+  float: left;
+}
+
 #answerButtons {
   float: left;
   font-size: 2em;
+  margin-top: 55px;
 }
 
 #answerButtons #btnNo {
@@ -109,11 +156,9 @@ video {
 
 div#home #gameMode  {
   position:fixed;
-    top: 50%;
-    left: 50%;
+    top: 34%;
+    left: 33%;
     border: none;
-    margin-top: -50px;
-    margin-left: -100px;
 }
 
 /* game */
@@ -121,9 +166,40 @@ div#home #gameMode  {
 div#game {
   /*background-image: url(/images/billie_holiday.png);*/
   background-image: url(/images/debut_light.png); 
-  width:75%;
+  width: 96%;
+  max-width: 97%;
   margin: 10px auto;
   padding: 20px;
+}
+
+#selectQuestion {
+  margin-bottom: 20px;
+  line-height: 20px;
+}
+
+#answers {
+  float: right;
+  margin-right: 15%;
+}
+
+#answers * {
+  float: left;
+  clear: both;
+}
+
+#answers #turns {
+  float: left;
+  color: red;
+  clear: none;
+  font-size: 1.2em;
+}
+
+p#invite {
+  margin-left: 20px;
+  margin-top: 30px;
+  font-size: 1.2em;
+  width: 40%;
+  float: left;
 }
 
 /* combobox */

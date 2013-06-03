@@ -7,55 +7,68 @@
     <link type="text/css" href="css/style.css" rel="stylesheet"></link>
   </head>
   <body>
-    <div id="home">
-      <div id="gameMode">
-        <div id="singleplayer" class="button">Singleplayer</div>
-        <div id="multiplayer" class="button">Multiplayer</div>
-      </div>
-    </div>
 
-    <div id="game" class="clearfix">
+    <header class="clearfix">
+      <h1>Who Am I?</h1>
       <div id="newRoom" class="button">Create A New Room</div>
-      <p id="name"></p>
-      <div id="videos" class="clearfix">
-        <video id="opponent" autoplay></video>
-      </div>
-
-      <div id="pickNames" class="clearfix">
-        <label for="character">Give your opponent a character:</label>
-        <input type="text" name="character" id="character">
-        <select id="dropdownName">
-          <option value="-1">Suggestions...</option>
-        </select>
-        <div id="btnChar" class="button">Send</div>
-      </div>
-
-      <div id="selectQuestion">
-        <div class="ui-widget">
-          <label>Select a question: </label>
-          <select id="dropdownQ">
-            <option value="-1"></option>
-          </select>
+    </header>
+    <div id="wrapper">
+      <div id="home">
+        <div id="gameMode">
+          <div class="startOption">
+            <img src="/images/single.png" alt="singleplayer" id="singleImg">
+            <div id="singleplayer" class="button">Singleplayer</div>
+          </div>
+          <div class="startOption">
+            <img src="/images/multi.png" alt="singleplayer" id="multiImg">
+            <div id="multiplayer" class="button">Multiplayer</div>
+          </div>
         </div>
-        <div id="btnAsk" class="button">Ask</div>
       </div>
 
-      <div id="answerButtons">
-        <div id="btnYes" class="button">Yes</div>
-        <div id="btnNo" class="button">No</div>
-      </div>
+      <div id="game" class="clearfix">
+        <p id="name"></p>
+        <div id="videos" class="clearfix">
+          <video id="opponent" autoplay></video>
+        </div>
+        <p id="invite">Waiting for your friend to join...</p>
 
-      <div id="answers" class="clearfix">
-        <p>Remaining turns: <span id="turns"></span></p>
-        <p>Results of guesses: </p>
-        <ul id="results">
-        </ul>
-      </div>
+        <div id="pickNames" class="clearfix">
+          <label for="character">Give your opponent a character:</label>
+          <input type="text" name="character" id="character">
+          <select id="dropdownName">
+            <option value="-1">Suggestions...</option>
+          </select>
+          <div id="btnChar" class="button">Send</div>
+        </div>
 
-      <div id="guess" class="clearfix">
-        <label for="character">Guess who you are:</label>
-        <input type="text" name="guessWho" id="guessWho">
-        <div id="btnGuess" class="button">Guess</div>
+        <div id="answers" class="clearfix">
+          <div><p>Remaining turns: </p><span id="turns"></span></div>
+          <p>Results of guesses: </p>
+          <ul id="results">
+          </ul>
+        </div>
+
+        <div id="selectQuestion">
+          <div class="ui-widget">
+            <label>Select a question: </label>
+            <select id="dropdownQ">
+              <option value="-1"></option>
+            </select>
+          </div>
+          <div id="btnAsk" class="button">Ask</div>
+        </div>
+
+        <div id="guess" class="clearfix">
+          <label for="character">Guess who you are:</label>
+          <input type="text" name="guessWho" id="guessWho">
+          <div id="btnGuess" class="button">Guess</div>
+        </div>
+
+        <div id="answerButtons">
+          <div id="btnYes" class="button">Yes</div>
+          <div id="btnNo" class="button">No</div>
+        </div>
       </div>
     </div>
 

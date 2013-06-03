@@ -57,6 +57,14 @@ app.get('/images/binding_light.png', function(req, res) {
   res.sendfile(__dirname + '/images/binding_light.png');
 });
 
+app.get('/images/single.png', function(req, res) {
+  res.sendfile(__dirname + '/images/single.png');
+});
+
+app.get('/images/multi.png', function(req, res) {
+  res.sendfile(__dirname + '/images/multi.png');
+});
+
 app.get('/js/webrtc.io.js', function(req, res) {
   res.sendfile(__dirname + '/js/webrtc.io.js');
 });

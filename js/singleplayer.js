@@ -12,7 +12,6 @@ var initSingle = function() {
 		'Is it a male?': 'male#gender',
 		'Is it a female?': 'female#gender',
 		'Is it human?': '1#human',
-		'Is it not human?': '0#human',
 		'Does it have black hair?': 'black#haircolor',
 		'Does it have blond hair?': 'blond#haircolor',
 		'Does it have brown hair?': 'brown#haircolor',

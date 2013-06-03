@@ -1,3 +1,5 @@
+var ready = false;
+
 var getNames = function() {
 	$("#pickNames").show();
 
@@ -20,7 +22,7 @@ var getNames = function() {
 		}));
 		$("#name").html($("#character").val());
 		$("#pickNames").hide();
-		if (ID == 1) {
+		if (ready) {
 			$("#answerButtons").show();
 		}
 		getAnswers();
@@ -32,7 +34,7 @@ var getNames = function() {
 		sendName();
 	});
 
-	$("#name").keyup(function(e){
+	$("#character").keyup(function(e){
 		if(e.keyCode == 13)
 		{
 		  sendName();
@@ -42,6 +44,7 @@ var getNames = function() {
 	rtc.on('receive_name', function() {
 		var data = nameSoc.recv.apply(this, arguments);
 		console.log(data.name);
+		ready = true;
 		name = data.name;
 	});
 }
