@@ -137,3 +137,24 @@ var notifyWinner = function() {
 		alert('you win! \n You were' + name);
 	});
 }
+
+var notifyLoser = function() {
+	var LossSoc = {
+		send: function(loss) {
+			rtc._socket.send(loss);
+		},
+		recv: function(loss) {
+			return loss;
+		}
+	}
+	LossSoc.send(JSON.stringify({
+		"eventName": "set_loss",
+		"data": {
+			"room": room
+			}
+	}));
+
+	rtc.on('receive_loss', function() {
+		alert('you lose! \n You were' + name);
+	});
+}

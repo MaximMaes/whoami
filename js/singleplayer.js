@@ -49,6 +49,9 @@ var initSingle = function() {
 			}
 
 			if (!right) {
+				if(tries == 2) {
+					$("#selectQuestion").hide();
+				}
 				$("#results").append("<li class='answNo'>" + Q + " No</li>");
 			} else if (right) {
 				$("#results").append("<li class='answYes'>" + Q + " Yes</li>");

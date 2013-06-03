@@ -201,6 +201,29 @@ webRTC.rtc.on('set_win', function(data, socket) {
   }
 });
 
+webRTC.rtc.on('set_loss', function(data, socket) {
+  var roomList = webRTC.rtc.rooms[data.room] || [];
+
+  for (var i = 0; i < roomList.length; i++) {
+    var socketId = roomList[i];
+
+    if (socketId !== socket.id) {
+      var soc = webRTC.rtc.getSocket(socketId);
+
+      if (soc) {
+        soc.send(JSON.stringify({
+          "eventName": "receive_loss",
+          "data": {}
+        }), function(error) {
+          if (error) {
+            console.log(error);
+          }
+        });
+      }
+    }
+  }
+});
+
 
 var mysql      = require('mysql');
 var connection = mysql.createConnection({

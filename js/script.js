@@ -22,6 +22,7 @@ $(document).ready(function() {
 
 	$("#home").show();
 	$("#game").hide();
+	$("#end").hide();
 	$("#invite").hide();
 	$("#pickNames").hide();
 	$("#messages").hide();
@@ -124,12 +125,13 @@ var takeGuess = function() {
 }
 
 var youLose = function() {
-	//notifyWinner();
-	alert('you lose! \n You were ' + name);
+	notifyWinner();
+	endLose();
 }
 
 var youWin = function() {
-	alert('you win! \n You were ' + name);
+	notifyLoser();
+	endWin();
 }
 
 var getChars = function() {
@@ -172,4 +174,18 @@ var getChars = function() {
 		});
 
 	});
+}
+
+var endWin = function() {
+	$("#game").hide();
+	$("#end").show();
+	$("#endNote").html('You win! \n You were ' + name);
+	$("#btnAgain").on('click', initNewRoom);
+}
+
+var endLose = function() {
+	$("#game").hide();
+	$("#end").show();
+	$("#endNote").html('You lose! \n You were ' + name);
+	$("#btnAgain").on('click', initNewRoom);
 }

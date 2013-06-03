@@ -172,6 +172,18 @@ div#game {
   padding: 20px;
 }
 
+#end {
+  width: 35%;
+  background-image: url(/images/debut_light.png);
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+#end p {
+  margin-bottom: 30px;
+}
+
 #selectQuestion {
   margin-bottom: 20px;
   line-height: 20px;
