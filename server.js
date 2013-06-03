@@ -13,8 +13,16 @@ app.get('/css/style.css', function(req, res) {
   res.sendfile(__dirname + '/css/style.css');
 });
 
+app.get('/css/library.css', function(req, res) {
+  res.sendfile(__dirname + '/css/library.css');
+});
+
 app.get('/js/script.js', function(req, res) {
   res.sendfile(__dirname + '/js/script.js');
+});
+
+app.get('/js/autocompleteCombobox.js', function(req, res) {
+  res.sendfile(__dirname + '/js/autocompleteCombobox.js');
 });
 
 app.get('/js/jquery-2.0.0.min.js', function(req, res) {
@@ -27,6 +35,10 @@ app.get('/images/debut_light.png', function(req, res) {
 
 app.get('/images/billie_holiday.png', function(req, res) {
   res.sendfile(__dirname + '/images/billie_holiday.png');
+});
+
+app.get('/images/binding_light.png', function(req, res) {
+  res.sendfile(__dirname + '/images/binding_light.png');
 });
 
 app.get('/js/webrtc.io.js', function(req, res) {

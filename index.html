@@ -2,7 +2,9 @@
 <html>
   <head>
     <title>Who Am I?</title>
+    <link type="text/css" href="css/library.css" rel="stylesheet"></link>
     <link type="text/css" href="css/style.css" rel="stylesheet"></link>
+    <link type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet"></link>
   </head>
   <body>
     <div id="home">
@@ -12,14 +14,14 @@
       </div>
     </div>
 
-    <div id="game">
+    <div id="game" class="clearfix">
       <div id="newRoom" class="button">Create A New Room</div>
       <p id="name"></p>
-      <div id="videos">
+      <div id="videos" class="clearfix">
         <video id="opponent" autoplay></video>
       </div>
 
-      <div id="pickNames">
+      <div id="pickNames" class="clearfix">
         <label for="character">Give your opponent a character:</label>
         <input type="text" name="character" id="character">
         <select id="dropdownName">
@@ -29,9 +31,11 @@
       </div>
 
       <div id="selectQuestion">
-        <select id="dropdownQ">
-          <option value="-1">Select a question...</option>
-        </select>
+        <div class="ui-widget">
+          <select id="dropdownQ">
+            <option value="-1">Select a question...</option>
+          </select>
+        </div>
         <div id="btnAsk" class="button">Ask</div>
       </div>
 
@@ -40,29 +44,30 @@
         <div id="btnNo" class="button">No</div>
       </div>
 
-      <div id="answers">
+      <div id="answers" class="clearfix">
         <p>Remaining turns: <span id="turns"></span></p>
         <p>Results of guesses: </p>
         <ul id="results">
         </ul>
       </div>
 
-      <div id="guess">
+      <div id="guess" class="clearfix">
         <label for="character">Guess who you are:</label>
         <input type="text" name="guessWho" id="guessWho">
         <div id="btnGuess" class="button">Guess</div>
       </div>
-
-      <div id="chatbox">
-        <div id="hideShowMessages" class="button">toggle chat</div>
-        <div id="messages">
-        </div>
-        <input id="chatinput" type="text" placeholder="Message:"/>
-      </div>
     </div>
-      
-      <script src="js/jquery-2.0.0.min.js"></script>
-      <script src="js/webrtc.io.js"></script>
-      <script src="js/script.js"></script>
+
+    <div id="chatbox">
+      <div id="hideShowMessages" class="button">toggle chat</div>
+      <div id="messages">
+      </div>
+      <input id="chatinput" type="text" placeholder="Message:"/>
+    </div>
+    <script src="js/jquery-2.0.0.min.js"></script>
+    <script src="js/webrtc.io.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="js/autocompleteCombobox.js"></script>
+    <script src="js/script.js"></script>
   </body>
 </html>

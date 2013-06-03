@@ -21,20 +21,9 @@ $(document).ready(function() {
 		initNewRoom();
 	}
 
-	/*
-
-		$("#pickNames").show();
-		$("#home").hide();
-		$("#game").show();
-		$("#messages").hide();
-		$("#answerButtons").hide();
-	*/
-		/* homepage */
-		$("#home").show();
-		$("#game").hide();
-		$("#pickNames").hide();
-	
-
+	$("#home").show();
+	$("#game").hide();
+	$("#pickNames").hide();
 	$("#messages").hide();
 	$("#answerButtons").hide();
 	$("#answers").hide();
@@ -43,9 +32,9 @@ $(document).ready(function() {
 
 	$("#singleplayer").on('click', function(e) {
 		initSingle();
-		initChat();
 		$("#home").hide();
 		$("#game").show();
+		$("#chatbox").hide();
 	});
 
 	$("#multiplayer").on('click', function(e) {
@@ -53,9 +42,6 @@ $(document).ready(function() {
 		$("#game").show();
 		initChat();
 		initMulti();
-
-		// give user ID
-		ID = getID();
 	});
 
 	$("#hideShowMessages").on('click', function(e) {
@@ -87,7 +73,7 @@ var cloneVideo = function(domId, socketId) {
 	var video = document.getElementById(domId);
 	var clone = video.cloneNode(false);
 	clone.id = "opponent" + socketId;
-	document.getElementById('videos').appendChild(clone);
+	$("#videos").prepend(clone);
 	videos.push(clone);
 	return clone;
 }
@@ -108,6 +94,11 @@ function initMulti() {
 	room = window.location.hash.slice(1);
 
 	rtc.connect("ws:" + window.location.href.substring(window.location.protocol.length).split('#')[0], room);
+
+	// give user ID
+	// need to use Timeout cause the websocket might not open quick enough
+	setTimeout(getID, 200);
+	setTimeout(getChars, 200);
 
 	rtc.on('add remote stream', function(stream, socketId) {
 		console.log("ADDING REMOTE STREAM...");
@@ -221,14 +212,12 @@ var getID = function() {
 		}
 	}
 
-	$("#multiplayer").on('click', function(e) {
-		IDSoc.send(JSON.stringify({
-			"eventName": "set_ID",
-			"data": {
-				"room": room
-				}
-		}));
-	});
+	IDSoc.send(JSON.stringify({
+		"eventName": "set_ID",
+		"data": {
+			"room": room
+			}
+	}));
 
 	rtc.on('receive_ID', function() {
 		var data = IDSoc.recv.apply(this, arguments);
@@ -249,7 +238,7 @@ var getNames = function() {
 		}
 	}
 
-	$("#btnChar").on('click', function(e) {
+	var sendName = function() {
 		nameSoc.send(JSON.stringify({
 			"eventName": "set_name",
 			"data": {
@@ -265,6 +254,17 @@ var getNames = function() {
 		getAnswers();
 		$("#answers").show();
 		$("#guess").show();
+	}
+
+	$("#btnChar").on('click', function(e) {
+		sendName();
+	});
+
+	$("#name").keyup(function(e){
+		if(e.keyCode == 13)
+		{
+		  sendName();
+		}
 	});
 
 	rtc.on('receive_name', function() {
@@ -288,7 +288,7 @@ var getAnswers = function() {
 
 	$("#btnYes").on('click', function(e) {
 		answerSoc.send(JSON.stringify({
-			"eventName": "set_answer",
+			"eventName": "set_ans",
 			"data": {
 				"ans": '1',
 				"end": end,
@@ -321,7 +321,7 @@ var getAnswers = function() {
 		}
 		tries -= 1;
 		$("#turns").html(tries);
-		if (tries == 1) {
+		if (tries <= 1) {
 			$("#turns").html('You must guess now!');
 			end = true;
 		}
@@ -335,6 +335,13 @@ $("#btnGuess").on('click', function(e) {
 	takeGuess();
 });
 
+$("#guessWho").keyup(function(e){
+	if(e.keyCode == 13)
+	{
+	  takeGuess();
+	}
+});
+
 var takeGuess = function() {
 	if (name == $("#guessWho").val()) {
 		youWin();
@@ -342,7 +349,7 @@ var takeGuess = function() {
 		if (tries > 2) {
 			tries -= 2;
 			$("#turns").html(tries);
-		} else if (tries == 2) {
+		} else if (tries <= 2) {
 			tries -= 2;
 			$("#turns").html(tries);
 			youLose();
@@ -416,28 +423,32 @@ var initSingle = function() {
 		$("#dropdownQ").append("<option value=" + val + ">" + key + "</option>");
 	});
 
-	$("#btnAsk").on('click', function(e) {
-		var right = true;
-		var Q = $("#dropdownQ option:selected").text();
-		var val = $("#dropdownQ").val();
-		var value = val.split('#')[0];
-		var field = val.split('#')[1];
-		
-		if(character[field] == value) {
-			right = true;
-		} else {
-			right = false;
-		}
+	$( "#dropdownQ" ).combobox();
 
-		if (!right) {
-			$("#results").append("<li class='answNo'>" + Q + " No</li>");
-		} else if (right) {
-			$("#results").append("<li class='answYes'>" + Q + " Yes</li>");
-		}
-		tries -= 1;
-		$("#turns").html(tries);
-		if (tries == 1) {
-			$("#turns").html('You must guess now!');
+	$("#btnAsk").on('click', function(e) {
+		if ($("#dropdownQ").val() != -1) {
+			var right = true;
+			var Q = $("#dropdownQ option:selected").text();
+			var val = $("#dropdownQ").val();
+			var value = val.split('#')[0];
+			var field = val.split('#')[1];
+			
+			if(character[field] == value) {
+				right = true;
+			} else {
+				right = false;
+			}
+
+			if (!right) {
+				$("#results").append("<li class='answNo'>" + Q + " No</li>");
+			} else if (right) {
+				$("#results").append("<li class='answYes'>" + Q + " Yes</li>");
+			}
+			tries -= 1;
+			$("#turns").html(tries);
+			if (tries == 1) {
+				$("#turns").html('You must guess now!');
+			}
 		}
 	});
 }
@@ -477,5 +488,9 @@ var getChars = function() {
 		$.each(data.rows, function(index, character) {
 			$("#dropdownName").append("<option value=" + character.idcharacter + ">" + character.name + "</option>");
 		});
+		$("#dropdownName").change(function() {
+			$("#character").val($("#dropdownName option:selected").text());
+		});
+
 	});
 }

@@ -10,7 +10,7 @@ body {
   padding: 0;
   margin: 0;
  /* background-image: url(/images/debut_light.png); */
-  background-image: url(/images/billie_holiday.png);
+  background-image: url(/images/binding_light.png);
 }
 
 #videos {
@@ -46,10 +46,9 @@ body {
 }
 
 #opponent {
-  position: absolute;
-  width: 20%;
-  left: 0px;
-  bottom: 0px;
+  position: relative;
+  width: 50%;
+  float: left;
   margin: 0;
 }
 
@@ -107,6 +106,7 @@ video {
   background-image: none;
   background-color: #06BD28;
   color: #EAE9E9;
+  cursor: pointer;
 }
 .button:active {
   position:relative;
@@ -115,15 +115,6 @@ video {
 
 /* home */
 
-div#home {
-  position:fixed;
-  top:0px;
-  left:0px;
-  width:100%;
-  height:100%;
-  overflow:auto;
-}
-
 div#home #gameMode  {
   position:fixed;
     top: 50%;
@@ -131,4 +122,34 @@ div#home #gameMode  {
     border: none;
     margin-top: -50px;
     margin-left: -100px;
+}
+
+/* game */
+
+div#game {
+  /*background-image: url(/images/billie_holiday.png);*/
+  background-image: url(/images/debut_light.png); 
+  width:75%;
+  margin: 10px auto;
+  padding: 20px;
+}
+
+/* combobox */
+.custom-combobox {
+  position: relative;
+  display: inline-block;
+}
+.custom-combobox-toggle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin-left: -1px;
+  padding: 0;
+  /* support: IE7 */
+  *height: 1.7em;
+  *top: 0.1em;
+}
+.custom-combobox-input {
+  margin: 0;
+  padding: 0.3em;
 }
