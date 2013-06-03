@@ -21,6 +21,22 @@ app.get('/js/script.js', function(req, res) {
   res.sendfile(__dirname + '/js/script.js');
 });
 
+app.get('/js/webrtcConnection.js', function(req, res) {
+  res.sendfile(__dirname + '/js/webrtcConnection.js');
+});
+
+app.get('/js/chat.js', function(req, res) {
+  res.sendfile(__dirname + '/js/chat.js');
+});
+
+app.get('/js/multiplayer.js', function(req, res) {
+  res.sendfile(__dirname + '/js/multiplayer.js');
+});
+
+app.get('/js/singleplayer.js', function(req, res) {
+  res.sendfile(__dirname + '/js/singleplayer.js');
+});
+
 app.get('/js/autocompleteCombobox.js', function(req, res) {
   res.sendfile(__dirname + '/js/autocompleteCombobox.js');
 });

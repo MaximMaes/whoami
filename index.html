@@ -3,8 +3,8 @@
   <head>
     <title>Who Am I?</title>
     <link type="text/css" href="css/library.css" rel="stylesheet"></link>
-    <link type="text/css" href="css/style.css" rel="stylesheet"></link>
     <link type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet"></link>
+    <link type="text/css" href="css/style.css" rel="stylesheet"></link>
   </head>
   <body>
     <div id="home">
@@ -32,8 +32,9 @@
 
       <div id="selectQuestion">
         <div class="ui-widget">
+          <label>Select a question: </label>
           <select id="dropdownQ">
-            <option value="-1">Select a question...</option>
+            <option value="-1"></option>
           </select>
         </div>
         <div id="btnAsk" class="button">Ask</div>
@@ -69,5 +70,9 @@
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script src="js/autocompleteCombobox.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/webrtcConnection.js"></script>
+    <script src="js/chat.js"></script>
+    <script src="js/multiplayer.js"></script>
+    <script src="js/singleplayer.js"></script>
   </body>
 </html>
