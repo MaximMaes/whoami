@@ -199,8 +199,6 @@ webRTC.rtc.on('get_chars', function(data, socket) {
               console.log(error);
             }
           });
-
-          console.log('First character:', rows[0].name);
         });
       }
     }

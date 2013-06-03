@@ -422,9 +422,7 @@ var initSingle = function() {
 		var val = $("#dropdownQ").val();
 		var value = val.split('#')[0];
 		var field = val.split('#')[1];
-		alert(field);
-		alert(character[field]);
-
+		
 		if(character[field] == value) {
 			right = true;
 		} else {
