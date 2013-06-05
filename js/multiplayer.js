@@ -132,10 +132,6 @@ var notifyWinner = function() {
 			"room": room
 			}
 	}));
-
-	rtc.on('receive_win', function() {
-		alert('you win! \n You were' + name);
-	});
 }
 
 var notifyLoser = function() {
@@ -153,8 +149,12 @@ var notifyLoser = function() {
 			"room": room
 			}
 	}));
-
-	rtc.on('receive_loss', function() {
-		alert('you lose! \n You were' + name);
-	});
 }
+
+rtc.on('receive_win', function() {
+	endWin();
+});
+
+rtc.on('receive_loss', function() {
+	endLose();
+});
