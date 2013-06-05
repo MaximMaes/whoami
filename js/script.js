@@ -79,10 +79,10 @@ var startSingle = function() {
 }
 
 var startMulti = function() {
-	$("#home").hide();
-	$("#game").show();
 	initChat();
 	initStream();
+	$("#home").hide();
+	$("#game").show();
 }
 
 var getID = function() {
